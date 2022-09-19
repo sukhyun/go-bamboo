@@ -27,3 +27,9 @@ type CollectionMetadata struct {
 	StartIndex int    `json:"start-index"`
 	MaxResult  int    `json:"max-result"`
 }
+
+type Index struct {
+	Self string `json:"self"`
+	Start int `json:"start"`
+	Limit int `json:"limit"`
+}

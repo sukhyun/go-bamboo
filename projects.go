@@ -42,6 +42,22 @@ type ProjectPlansInformation struct {
 	Size int `json:"size,omitempty"`
 }
 
+// ProjectRepos is the information for project's repositories
+type ProjectRepos struct {
+	Id int `json:"id"`
+	Name string `json:"name"`
+	Url string `json:"url"`
+	Location string `json:"location"`
+	Icon string `json:"string"`
+	Type string `json:"type"`
+	IsAdmin bool `json:"isAdmin"`
+}
+
+type ProjectRepositoryResult struct {
+	*Index
+	Repositories []*ProjectRepos `json:"results"`
+}
+
 // ProjectInfo get the information on the specific project
 func (p *ProjectService) ProjectInfo(projectKey string) (*ProjectInformation, *http.Response, error) {
 	var u string
@@ -124,3 +140,25 @@ func (p *ProjectService) ListProjects() ([]*Project, *http.Response, error) {
 
 	return projectResp.Projects.ProjectList, response, nil
 }
+
+func (p *ProjectService) ProjectRepositories(projectKey string) ([]*ProjectRepos, *http.Response, error) {
+	u := fmt.Sprintf("project/%s/repositories", projectKey)
+  
+	request, err := p.client.NewRequest(http.MethodGet, u, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+  
+	projectInfo := ProjectRepositoryResult{}
+	response, err := p.client.Do(request, &projectInfo)
+	if err != nil {
+		return nil, nil, err
+	}
+  
+	if response.StatusCode != http.StatusOK {
+		return nil, response,
+		&simpleError{fmt.Sprintf("Getting Project Information returned: %s", response.Status)}
+	}
+  
+	return projectInfo.Repositories, response, nil
+ }
