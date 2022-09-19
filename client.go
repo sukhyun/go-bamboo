@@ -80,7 +80,7 @@ func (c *Client) SetURL(desiredURL string) error {
 // NewSimpleClient returns a new Bamboo API client. If a nil httpClient is
 // provided, http.DefaultClient will be used. To use API methods which require
 // authentication, provide an admin username/password
-func NewSimpleClient(httpClient *http.Client, username, password string) *Client {
+func NewSimpleClient(httpClient *http.Client, username, password, token string) *Client {
 	if httpClient == nil {
 		httpClient = &http.Client{
 			Timeout: time.Second * 10,
@@ -88,7 +88,14 @@ func NewSimpleClient(httpClient *http.Client, username, password string) *Client
 	}
 	baseURL, _ := url.Parse(defaultBaseURL)
 
-	c := &Client{client: httpClient, BaseURL: baseURL, SimpleCreds: &SimpleCredentials{Username: username, Password: password}}
+//	c := &Client{client: httpClient, BaseURL: baseURL, SimpleCreds: &SimpleCredentials{Username: username, Password: password}}
+	var c *Client
+	if len(token) != 0 {
+		c = &Client{client: httpClient, BaseURL: baseURL, SimpleCreds: &SimpleCredentials{UseToken: true, Token: token}}
+	} else {
+		c = &Client{client: httpClient, BaseURL: baseURL, SimpleCreds: &SimpleCredentials{UseToken: false, Username: username, Password: password}}
+	}
+
 	c.common.client = c
 	c.Plans = (*PlanService)(&c.common)
 	c.Deploys = (*DeployService)(&c.common)
@@ -135,7 +142,15 @@ func (c *Client) NewRequest(method, urlStr string, body interface{}) (*http.Requ
 	}
 
 	creds := c.SimpleCreds
-	req.SetBasicAuth(creds.Username, creds.Password)
+	//req.SetBasicAuth(creds.Username, creds.Password)
+
+	if creds.UseToken {
+		tokenHeader := "Bearer:" + creds.Token
+		req.Header.Set("Authorization", tokenHeader)	
+	} else {
+		req.SetBasicAuth(creds.Username, creds.Password)
+	}
+
 	req.Header.Set("Accept", "application/json")
 
 	if body != nil {
