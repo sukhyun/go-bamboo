@@ -20,14 +20,14 @@ go-github requires Go version 1.7 or greater.
 
 ## Usage ##
 ```go
-import bamboo "github.com/rcarmstrong/go-bamboo"
+import bamboo "github.com/sukhyun/go-bamboo"
 ```
 
 ### Authenticaiton ###
 At the moment, go-bamboo only supports simple credentials for authentication
 
 ```go
-bambooClient := bamboo.NewSimpleClient(nil, "myUsername", "myPassword")
+bambooClient := bamboo.NewSimpleClient(nil, "myUsername", "myPassword", "myToken")
 
 // Optionally set a different connection URL for the bamboo client.
 // Defaults to "http://localhost:8085/rest/api/latest/"
