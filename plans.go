@@ -44,6 +44,17 @@ type PlanKey struct {
 	Key string `json:"key,omitempty"`
 }
 
+// SpecResponse is the information of specification
+type SpecResponse struct {
+	Spec *SpecDetail `json:"spec"`
+}
+
+type SpecDetail struct {
+	ProjectKey string `json:"projectKey,omitempty"`
+	BuildKey string `json:"buildKey,omitempty"`
+	Code string `json:"code,omitempty`
+}
+
 // CreatePlanBranch will create a plan branch with the given branch name for the specified build
 func (p *PlanService) CreatePlanBranch(planKey, branchName string, options *PlanCreateBranchOptions) (bool, *http.Response, error) {
 	var u string
@@ -187,4 +198,30 @@ func (p *PlanService) DisablePlan(planKey string) (*http.Response, error) {
 		return response, err
 	}
 	return response, nil
+}
+
+// GetSpecs gets informations on plan's spec
+func (p *PlanService) GetSpecs(key string) (string, *http.Response, error) {
+	requestValue := fmt.Sprintf("plan/%s/specs?format=YAML", key)
+	request, err := p.client.NewRequest(http.MethodGet, requestValue, nil)
+	if err != nil {
+		return "", nil, err
+	}
+  
+	// Restrict results to one for speed
+	values := request.URL.Query()
+	values.Add("max-results", "1")
+	request.URL.RawQuery = values.Encode()
+  
+	specResp := SpecResponse{}
+	response, err := p.client.Do(request, &specResp)
+	if err != nil {
+		return "", response, err
+	}
+  
+	if response.StatusCode != 200 {
+		return "", response, &simpleError{fmt.Sprintf("Getting the spec of plans returned %s", response.Status)}
+	}
+  
+	return specResp.Spec.Code, response, nil
 }
