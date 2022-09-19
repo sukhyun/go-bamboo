@@ -1,6 +1,6 @@
 package bamboo_test
 
-import bamboo "github.com/rcarmstrong/go-bamboo"
+import bamboo "github.com/sukhyun/go-bamboo"
 
 var (
 	permissionsTestCases = []bamboo.PermissionsOpts{

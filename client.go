@@ -1,7 +1,7 @@
 // package bamboo provides a client to communicate with Atlassian Bamboo CI Server API
 //
 // Usage:
-//  import bamboo "github.com/rcarmstrong/go-bamboo"
+//  import bamboo "github.com/sukhyun/go-bamboo"
 //
 // A Bamboo client exposes various services that control access to different parts of
 // the Bamboo API. For example:

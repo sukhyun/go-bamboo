@@ -6,7 +6,7 @@ import (
 	"testing"
 	"github.com/stretchr/testify/assert"
 
-	bamboo "github.com/rcarmstrong/go-bamboo"
+	bamboo "github.com/sukhyun/go-bamboo"
 )
 
 func TestListPlans(t *testing.T) {

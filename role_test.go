@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	bamboo "github.com/rcarmstrong/go-bamboo"
+	bamboo "github.com/sukhyun/go-bamboo"
 )
 
 func TestRolePermissionsList(t *testing.T) {

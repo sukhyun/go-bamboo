@@ -1,9 +1,11 @@
 module github.com/sukhyun/go-bamboo
 
-go 1.14
+go 1.19
+
+require github.com/stretchr/testify v1.8.0
 
 require (
-	github.com/stretchr/testify v1.6.1
-	golang.org/x/lint v0.0.0-20200302205851-738671d3881b // indirect
-	golang.org/x/tools v0.0.0-20201002184944-ecd9fd270d5d // indirect
+	github.com/davecgh/go-spew v1.1.1 // indirect
+	github.com/pmezard/go-difflib v1.0.0 // indirect
+	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
